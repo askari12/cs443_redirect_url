@@ -1,0 +1,9 @@
+/home/askari/Documents/Test_Projects/Spring Boot/demo2/src/main/java/com/linkly/demo/DemoApplication.java
+/home/askari/Documents/Test_Projects/Spring Boot/demo2/src/main/java/com/linkly/demo/Config/MultipleMongoConfig.java
+/home/askari/Documents/Test_Projects/Spring Boot/demo2/src/main/java/com/linkly/demo/MainController.java
+/home/askari/Documents/Test_Projects/Spring Boot/demo2/src/main/java/com/linkly/demo/primary/repository/URLRepository.java
+/home/askari/Documents/Test_Projects/Spring Boot/demo2/src/main/java/com/linkly/demo/Config/PrimaryMongoConfig.java
+/home/askari/Documents/Test_Projects/Spring Boot/demo2/src/main/java/com/linkly/demo/secondary/UrlClicksEntity.java
+/home/askari/Documents/Test_Projects/Spring Boot/demo2/src/main/java/com/linkly/demo/Config/SecondaryMongoConfig.java
+/home/askari/Documents/Test_Projects/Spring Boot/demo2/src/main/java/com/linkly/demo/primary/UrlEntity.java
+/home/askari/Documents/Test_Projects/Spring Boot/demo2/src/main/java/com/linkly/demo/secondary/UrlClicksRepository.java
