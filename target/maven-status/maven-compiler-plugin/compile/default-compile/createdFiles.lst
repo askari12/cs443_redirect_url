@@ -1,0 +1,6 @@
+com/linkly/demo/Collection/UrlMapping.class
+com/linkly/demo/Collection/UrlClicksEntity.class
+com/linkly/demo/Controller/MainController.class
+com/linkly/demo/Repository/UrlClicksRepository.class
+com/linkly/demo/Config/AnalyticsConfig.class
+com/linkly/demo/DemoApplication.class
