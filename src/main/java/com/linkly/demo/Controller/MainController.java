@@ -6,15 +6,16 @@ import com.linkly.demo.Collection.UrlMapping;
 import com.linkly.demo.Repository.UrlClicksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Date;
 
 @CrossOrigin
@@ -30,18 +31,35 @@ public class MainController {
     // Mapped to route all alphaNumerics of size 10
     @CrossOrigin
     @GetMapping(value = "/{path:[a-zA-Z0-9]{10}}")
-    public ResponseEntity<Object> getLongURL(@PathVariable String path /*, HttpServletResponse httpServletResponse*/) {
+    public ResponseEntity<Object> getLongURL(@PathVariable String path , HttpServletRequest httpServletRequest) {
 
-//        System.out.println(path);
-
-        // Just For testing
-        updateAnalytics(path , LocalDateTime.now().plusDays(10));
-
+        // create an instance of RestTemplate
         RestTemplate restTemplate = new RestTemplate();
-        UrlMapping result = null;
+        UrlMapping result;
+
+        // create headers
+        HttpHeaders headers = new HttpHeaders();
+
+        // set `Content-Type` and `Accept` headers
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        // example of custom header
+        headers.set("Authorization", "Basic bGlua2x5YWRtaW46S3VLLCFxM2EtOVhxKEFCXw==");
+
+        // build the request
+        HttpEntity request = new HttpEntity(headers);
+
         try {
-            result = restTemplate.getForObject(getLongUrlUri + "/url/short/get/" + path, UrlMapping.class);
-            System.out.println(result.getLongUrl());
+            // make an HTTP GET request with headers
+            ResponseEntity<UrlMapping> response = restTemplate.exchange(
+                    getLongUrlUri + "/url/short/get/" + path,
+                    HttpMethod.GET,
+                    request,
+                    UrlMapping.class
+            );
+            result = response.getBody();
+            System.out.println(response.getBody().getLongUrl());
 
         }
         catch (HttpClientErrorException e) {
@@ -58,15 +76,15 @@ public class MainController {
             );
         }
 
-        updateAnalytics(path, result.getTerminated_at());
+        updateAnalytics(path, result.getTerminated_at() , httpServletRequest.getRemoteAddr());
         return ResponseEntity.status(302).header("Location" , result.getLongUrl()).build();
     }
 
 
     // Update the Analytics Database by 1
-    public void updateAnalytics(String path, LocalDateTime terminate_at) {
+    public void updateAnalytics(String path, LocalDateTime terminate_at , String ipAddress) {
         LocalDateTime timeStamp = LocalDateTime.now();
-        UrlClicksEntity obj = new UrlClicksEntity(path , timeStamp, terminate_at);
+        UrlClicksEntity obj = new UrlClicksEntity(path , timeStamp, terminate_at , ipAddress);
         urlClicksRepository.save(obj);
     }
 
